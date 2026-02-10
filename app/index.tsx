@@ -14,7 +14,7 @@ import {
 
 export default function InstanceListScreen() {
     const router = useRouter();
-    const { instances, removeInstance } = useInstanceStore();
+    const { instances, removeInstance, duplicateInstance } = useInstanceStore();
 
     const handlePress = useCallback(
         (instance: USSDInstance) => {
@@ -34,6 +34,10 @@ export default function InstanceListScreen() {
                         onPress: () => router.push(`/create?id=${instance.id}`),
                     },
                     {
+                        text: "Duplicate",
+                        onPress: () => duplicateInstance(instance.id),
+                    },
+                    {
                         text: "Delete",
                         style: "destructive",
                         onPress: () => removeInstance(instance.id),
@@ -42,7 +46,7 @@ export default function InstanceListScreen() {
                 ]
             );
         },
-        [removeInstance, router]
+        [removeInstance, duplicateInstance, router]
     );
 
     const renderItem = useCallback(

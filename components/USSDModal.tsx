@@ -94,7 +94,7 @@ export default function USSDModal({
                                     onChangeText={setUserInput}
                                     placeholder="Enter response"
                                     placeholderTextColor="#636366"
-                                    keyboardType="default"
+                                    keyboardType="phone-pad"
                                     autoFocus
                                     returnKeyType="send"
                                     onSubmitEditing={handleSend}

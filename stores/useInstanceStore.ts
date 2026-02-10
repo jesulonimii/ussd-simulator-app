@@ -19,6 +19,7 @@ interface InstanceStore {
     addInstance: (instance: Omit<USSDInstance, "id" | "createdAt">) => void;
     removeInstance: (id: string) => void;
     updateInstance: (id: string, updates: Partial<Omit<USSDInstance, "id" | "createdAt">>) => void;
+    duplicateInstance: (id: string) => void;
     getInstance: (id: string) => USSDInstance | undefined;
 }
 
@@ -54,6 +55,20 @@ export const useInstanceStore = create<InstanceStore>()(
 
             getInstance: (id) => {
                 return get().instances.find((i) => i.id === id);
+            },
+
+            duplicateInstance: (id) => {
+                const original = get().instances.find((i) => i.id === id);
+                if (!original) return;
+                const duplicate: USSDInstance = {
+                    ...original,
+                    id: Crypto.randomUUID(),
+                    name: `${original.name} (Copy)`,
+                    createdAt: Date.now(),
+                };
+                set((state) => ({
+                    instances: [duplicate, ...state.instances],
+                }));
             },
         }),
         {
