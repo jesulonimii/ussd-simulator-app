@@ -1,24 +1,45 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    <QueryClientProvider client={queryClient}>
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: "#000000" },
+          headerTintColor: "#FFFFFF",
+          headerTitleStyle: { fontWeight: "600" },
+          contentStyle: { backgroundColor: "#000000" },
+          animation: "slide_from_right",
+        }}
+      >
+        <Stack.Screen
+          name="index"
+          options={{
+            title: "USSD Simulator",
+          }}
+        />
+        <Stack.Screen
+          name="create"
+          options={{
+            title: "New Instance",
+            presentation: "modal",
+            headerStyle: { backgroundColor: "#1C1C1E" },
+          }}
+        />
+        <Stack.Screen
+          name="dialer/[id]"
+          options={{
+            title: "",
+            headerTransparent: true,
+            headerBackTitle: "Back",
+          }}
+        />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <StatusBar style="light" />
+    </QueryClientProvider>
   );
 }
