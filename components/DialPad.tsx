@@ -41,11 +41,15 @@ export default function DialPad({ onCall }: DialPadProps) {
         setInput((prev) => prev.slice(0, -1));
     }, []);
 
+    const handleClear = useCallback(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        setInput("");
+    }, []);
+
     const handleCall = useCallback(() => {
         if (input.trim()) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             onCall(input.trim());
-            setInput("");
         }
     }, [input, onCall]);
 
@@ -106,8 +110,10 @@ export default function DialPad({ onCall }: DialPadProps) {
                     <Text style={styles.callIcon}>📞</Text>
                 </Pressable>
 
-                {/* Spacer for symmetry */}
-                <View style={styles.actionBtn} />
+                {/* Clear all */}
+                <Pressable onPress={handleClear} style={styles.actionBtn}>
+                    <Text style={styles.clearText}>Clear</Text>
+                </Pressable>
             </View>
         </View>
     );
@@ -177,6 +183,11 @@ const styles = StyleSheet.create({
     deleteText: {
         color: "#8E8E93",
         fontSize: 18,
+    },
+    clearText: {
+        color: "#8E8E93",
+        fontSize: 14,
+        fontWeight: "500",
     },
     callBtn: {
         width: 72,
